@@ -12,6 +12,8 @@ const bcrypt = require('bcryptjs');
 const app = express();
 app.use(express.json());
 
+app.get('/ping', (req, res) => res.status(200).json({ status: 'active' }));
+
 require("./routes/auth")(app);
 require("./routes/category.routes")(app);
 require("./routes/products")(app);

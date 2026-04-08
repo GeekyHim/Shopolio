@@ -21,7 +21,7 @@ module.exports = (app) => {
    *       - in: query
    *         name: sorting
    *         schema: { type: string, example: "createdAt:desc" }
-   *         description: "Sorting format: field:asc or field:desc"
+   *         description: Sorting format: field:asc or field:desc
    *       - in: query
    *         name: categoryId
    *         schema: { type: string }
