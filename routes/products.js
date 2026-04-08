@@ -12,31 +12,41 @@ module.exports = (app) => {
    *     parameters:
    *       - in: query
    *         name: page
-   *         schema: { type: integer, minimum: 1 }
+   *         schema:
+   *           type: integer
+   *           minimum: 1
    *         description: Page number
    *       - in: query
    *         name: limit
-   *         schema: { type: integer, minimum: 1 }
+   *         schema:
+   *           type: integer
+   *           minimum: 1
    *         description: Items per page
    *       - in: query
    *         name: sorting
-   *         schema: { type: string, example: "createdAt:desc" }
-   *         description: Sorting format: field:asc or field:desc
+   *         schema:
+   *           type: string
+   *           example: createdAt:desc
+   *         description: Sorting format field:asc or field:desc
    *       - in: query
    *         name: categoryId
-   *         schema: { type: string }
+   *         schema:
+   *           type: string
    *         description: Filter by categoryId
    *       - in: query
    *         name: minPrice
-   *         schema: { type: number }
+   *         schema:
+   *           type: number
    *         description: Filter by minimum price
    *       - in: query
    *         name: maxPrice
-   *         schema: { type: number }
+   *         schema:
+   *           type: number
    *         description: Filter by maximum price
    *       - in: query
    *         name: q
-   *         schema: { type: string }
+   *         schema:
+   *           type: string
    *         description: Search by product name (case-insensitive)
    *     responses:
    *       '200':
@@ -44,24 +54,34 @@ module.exports = (app) => {
    *         content:
    *           application/json:
    *             schema:
-   *               allOf:
-   *                 - $ref: '#/components/schemas/ApiResponse'
-   *                 - type: object
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: true
+   *                 message:
+   *                   type: string
+   *                   example: Products fetched
+   *                 data:
+   *                   type: object
    *                   properties:
-   *                     data:
+   *                     items:
+   *                       type: array
+   *                       items:
+   *                         $ref: '#/components/schemas/Product'
+   *                     pagination:
    *                       type: object
    *                       properties:
-   *                         items:
-   *                           type: array
-   *                           items:
-   *                             $ref: '#/components/schemas/Product'
-   *                         pagination:
-   *                           type: object
-   *                           properties:
-   *                             page: { type: integer }
-   *                             limit: { type: integer }
-   *                             total: { type: integer }
-   *                   required: [data]
+   *                         page:
+   *                           type: integer
+   *                         limit:
+   *                           type: integer
+   *                         total:
+   *                           type: integer
+   *               required:
+   *                 - success
+   *                 - message
+   *                 - data
    *       '400':
    *         description: Bad Request
    *         content:
@@ -88,20 +108,28 @@ module.exports = (app) => {
    *       - in: path
    *         name: productId
    *         required: true
-   *         schema: { type: string }
+   *         schema:
+   *           type: string
    *     responses:
    *       '200':
    *         description: OK
    *         content:
    *           application/json:
    *             schema:
-   *               allOf:
-   *                 - $ref: '#/components/schemas/ApiResponse'
-   *                 - type: object
-   *                   properties:
-   *                     data:
-   *                       $ref: '#/components/schemas/Product'
-   *                   required: [data]
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: true
+   *                 message:
+   *                   type: string
+   *                   example: Product fetched
+   *                 data:
+   *                   $ref: '#/components/schemas/Product'
+   *               required:
+   *                 - success
+   *                 - message
+   *                 - data
    *       '400':
    *         description: Bad Request
    *         content:
@@ -138,13 +166,20 @@ module.exports = (app) => {
    *         content:
    *           application/json:
    *             schema:
-   *               allOf:
-   *                 - $ref: '#/components/schemas/ApiResponse'
-   *                 - type: object
-   *                   properties:
-   *                     data:
-   *                       $ref: '#/components/schemas/Product'
-   *                   required: [data]
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: true
+   *                 message:
+   *                   type: string
+   *                   example: Product created
+   *                 data:
+   *                   $ref: '#/components/schemas/Product'
+   *               required:
+   *                 - success
+   *                 - message
+   *                 - data
    *       '400':
    *         description: Bad Request
    *         content:
@@ -183,7 +218,8 @@ module.exports = (app) => {
    *       - in: path
    *         name: productId
    *         required: true
-   *         schema: { type: string }
+   *         schema:
+   *           type: string
    *     requestBody:
    *       required: true
    *       content:
@@ -196,13 +232,20 @@ module.exports = (app) => {
    *         content:
    *           application/json:
    *             schema:
-   *               allOf:
-   *                 - $ref: '#/components/schemas/ApiResponse'
-   *                 - type: object
-   *                   properties:
-   *                     data:
-   *                       $ref: '#/components/schemas/Product'
-   *                   required: [data]
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: true
+   *                 message:
+   *                   type: string
+   *                   example: Product updated
+   *                 data:
+   *                   $ref: '#/components/schemas/Product'
+   *               required:
+   *                 - success
+   *                 - message
+   *                 - data
    *       '400':
    *         description: Bad Request
    *         content:
@@ -241,7 +284,8 @@ module.exports = (app) => {
    *       - in: path
    *         name: productId
    *         required: true
-   *         schema: { type: string }
+   *         schema:
+   *           type: string
    *     responses:
    *       '200':
    *         description: OK

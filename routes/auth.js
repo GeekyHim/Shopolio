@@ -21,14 +21,20 @@ module.exports = (app) => {
    *         content:
    *           application/json:
    *             schema:
-   *               allOf:
-   *                 - $ref: '#/components/schemas/ApiResponse'
-   *                 - type: object
-   *                   properties:
-   *                     data:
-   *                       $ref: '#/components/schemas/User'
-   *                   required:
-   *                     - data
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: true
+   *                 message:
+   *                   type: string
+   *                   example: Signup successful
+   *                 data:
+   *                   $ref: '#/components/schemas/User'
+   *               required:
+   *                 - success
+   *                 - message
+   *                 - data
    *       '400':
    *         description: Bad Request
    *         content:
@@ -63,15 +69,31 @@ module.exports = (app) => {
    *         content:
    *           application/json:
    *             schema:
-   *               allOf:
-   *                 - $ref: '#/components/schemas/ApiResponse'
-   *                 - type: object
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: true
+   *                 message:
+   *                   type: string
+   *                   example: Signin successful
+   *                 data:
+   *                   type: object
    *                   properties:
-   *                     data:
-   *                       type: object
-   *                       additionalProperties: true
-   *                   required:
-   *                     - data
+   *                     name:
+   *                       type: string
+   *                     userId:
+   *                       type: string
+   *                     email:
+   *                       type: string
+   *                     userType:
+   *                       type: string
+   *                     accessToken:
+   *                       type: string
+   *               required:
+   *                 - success
+   *                 - message
+   *                 - data
    *       '400':
    *         description: Bad Request
    *         content:

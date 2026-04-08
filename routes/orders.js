@@ -23,13 +23,20 @@ module.exports = (app) => {
    *         content:
    *           application/json:
    *             schema:
-   *               allOf:
-   *                 - $ref: '#/components/schemas/ApiResponse'
-   *                 - type: object
-   *                   properties:
-   *                     data:
-   *                       $ref: '#/components/schemas/Order'
-   *                   required: [data]
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: true
+   *                 message:
+   *                   type: string
+   *                   example: Order created
+   *                 data:
+   *                   $ref: '#/components/schemas/Order'
+   *               required:
+   *                 - success
+   *                 - message
+   *                 - data
    *       '400':
    *         description: Bad Request
    *         content:
@@ -63,19 +70,31 @@ module.exports = (app) => {
    *     parameters:
    *       - in: query
    *         name: page
-   *         schema: { type: integer, minimum: 1 }
+   *         schema:
+   *           type: integer
+   *           minimum: 1
    *         description: Page number
    *       - in: query
    *         name: limit
-   *         schema: { type: integer, minimum: 1 }
+   *         schema:
+   *           type: integer
+   *           minimum: 1
    *         description: Items per page
    *       - in: query
    *         name: sorting
-   *         schema: { type: string, example: "createdAt:desc" }
-   *         description: "Sorting format: field:asc or field:desc"
+   *         schema:
+   *           type: string
+   *           example: createdAt:desc
+   *         description: Sorting format field:asc or field:desc
    *       - in: query
    *         name: status
-   *         schema: { type: string, enum: ['PLACED','SHIPPED','DELIVERED','CANCELLED'] }
+   *         schema:
+   *           type: string
+   *           enum:
+   *             - PLACED
+   *             - SHIPPED
+   *             - DELIVERED
+   *             - CANCELLED
    *         description: Filter by order status
    *     responses:
    *       '200':
@@ -83,24 +102,34 @@ module.exports = (app) => {
    *         content:
    *           application/json:
    *             schema:
-   *               allOf:
-   *                 - $ref: '#/components/schemas/ApiResponse'
-   *                 - type: object
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: true
+   *                 message:
+   *                   type: string
+   *                   example: Orders fetched
+   *                 data:
+   *                   type: object
    *                   properties:
-   *                     data:
+   *                     items:
+   *                       type: array
+   *                       items:
+   *                         $ref: '#/components/schemas/Order'
+   *                     pagination:
    *                       type: object
    *                       properties:
-   *                         items:
-   *                           type: array
-   *                           items:
-   *                             $ref: '#/components/schemas/Order'
-   *                         pagination:
-   *                           type: object
-   *                           properties:
-   *                             page: { type: integer }
-   *                             limit: { type: integer }
-   *                             total: { type: integer }
-   *                   required: [data]
+   *                         page:
+   *                           type: integer
+   *                         limit:
+   *                           type: integer
+   *                         total:
+   *                           type: integer
+   *               required:
+   *                 - success
+   *                 - message
+   *                 - data
    *       '401':
    *         description: Unauthorized
    *         content:
@@ -129,20 +158,28 @@ module.exports = (app) => {
    *       - in: path
    *         name: orderId
    *         required: true
-   *         schema: { type: string }
+   *         schema:
+   *           type: string
    *     responses:
    *       '200':
    *         description: OK
    *         content:
    *           application/json:
    *             schema:
-   *               allOf:
-   *                 - $ref: '#/components/schemas/ApiResponse'
-   *                 - type: object
-   *                   properties:
-   *                     data:
-   *                       $ref: '#/components/schemas/Order'
-   *                   required: [data]
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: true
+   *                 message:
+   *                   type: string
+   *                   example: Order fetched
+   *                 data:
+   *                   $ref: '#/components/schemas/Order'
+   *               required:
+   *                 - success
+   *                 - message
+   *                 - data
    *       '400':
    *         description: Bad Request
    *         content:
@@ -177,7 +214,8 @@ module.exports = (app) => {
    *       - in: path
    *         name: orderId
    *         required: true
-   *         schema: { type: string }
+   *         schema:
+   *           type: string
    *     requestBody:
    *       required: true
    *       content:
