@@ -46,11 +46,9 @@ const swaggerDefinition = {
 function buildSwaggerSpec() {
   return swaggerJSDoc({
     definition: swaggerDefinition,
-    // Automatically scan all route files using glob patterns.
-    apis: [path.join(__dirname, '../routes/*.js'), path.join(__dirname, '../routes/**/*.js')],
+    apis: [path.resolve(process.cwd(), 'routes/**/*.js')],
   });
 }
-
 module.exports = {
   swaggerEnabled,
   swaggerSpec: swaggerEnabled ? buildSwaggerSpec() : null,
