@@ -13,15 +13,17 @@ const app = express();
 app.use(express.json());
 
 app.get('/ping', (req, res) => res.status(200).json({ status: 'active' }));
-
+app.get("/", (req, res) => {
+  res.redirect("/api-docs");
+}); 
 require("./routes/auth")(app);
 require("./routes/category.routes")(app);
 require("./routes/products")(app);
 require("./routes/orders")(app);
 
-if (swaggerConfig.swaggerEnabled && swaggerConfig.swaggerSpec) {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerConfig.swaggerSpec));
-}
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerConfig.swaggerSpec));
+
 
 async function initAdmin() {
   const user = await user_model.findOne({ userId: "ADMIN" });
