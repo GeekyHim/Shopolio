@@ -1,2 +1,5 @@
 node_modules/
 private/
+.cursor-cache/
+.env
+.cursorrules

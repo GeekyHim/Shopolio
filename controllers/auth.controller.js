@@ -37,12 +37,17 @@ exports.signup = async (req,res) => {
             createdAt : user_created.createdAt,
             updatedAt : user_created.updatedAt
         } // this doesnt have password for security purposes
-
-        res.status(201).send(res_obj) // 201 means successfully created
+        res.status(201).send({
+            success: true,
+            message: 'Signup successful',
+            data: res_obj
+        }) // 201 means successfully created
     }catch(err){
-        consolele.log("Error while registering the user...",err)
+        console.log("Error while registering the user...",err)
         res.status(500).send({
-            message : "Some Error Happened while registering the user"
+            success: false,
+            message : "Some Error Happened while registering the user",
+            data : {}
         }) //500 means internal server error
     }
     
@@ -58,7 +63,9 @@ exports.signin = async (req,res) => {
     const user = await user_model.findOne({userId : req.body.userId})
     if(user == null){
         return res.status(400).send({
-            message : "ERROR - User Id provided is Invalid or Doesn't Exist"
+            success: false,
+            message : "ERROR - User Id provided is Invalid or Doesn't Exist",
+            data : {}
         })
     }
    
@@ -69,7 +76,9 @@ exports.signin = async (req,res) => {
     // true if match else false
     if(!isPasswordValid){
         return res.status(401).send({
-            message : "ERROR : Password Invalid" // Galat hai, Sahi daalo :P
+            success: false,
+            message : "ERROR : Password Invalid", // Galat hai, Sahi daalo :P
+            data : {}
         })
     }
 
@@ -81,10 +90,14 @@ exports.signin = async (req,res) => {
     // TTL in seconds, here 2 mins ie 120 sec
 
     res.status(200).send({
-        name : user.name,
-        userId : user.userId,
-        email : user.email,
-        userType : user.userType,
-        accessToken : token
+        success: true,
+        message: 'Signin successful',
+        data: {
+            name : user.name,
+            userId : user.userId,
+            email : user.email,
+            userType : user.userType,
+            accessToken : token
+        }
     })
 }

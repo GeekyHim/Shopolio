@@ -9,21 +9,43 @@ const verifySignUpBody = async (req,res,next) =>{
     try{
 
         //check for all the essentials
-        if(!res.body.name){ // 400 -> Bad request
+        if(!req.body.name){ // 400 -> Bad request
             return res.status(400).send({
-                message : "FAILED : Name was not provided"
+                success: false,
+                message : "FAILED : Name was not provided",
+                data : {}
             })
         }
 
-        if(!res.body.email){
+        if(!req.body.email){
             return res.status(400).send({
-                message : "FAILED : Email was not provided"
+                success: false,
+                message : "FAILED : Email was not provided",
+                data : {}
             })
         }
 
-        if(!res.body.userId){
+        if(!req.body.userId){
             return res.status(400).send({
-                message : "FAILED : User ID was not provided"
+                success: false,
+                message : "FAILED : User ID was not provided",
+                data : {}
+            })
+        }
+
+        if(!req.body.password){
+            return res.status(400).send({
+                success: false,
+                message : "FAILED : Password was not provided",
+                data : {}
+            })
+        }
+
+        if(!req.body.userType){
+            return res.status(400).send({
+                success: false,
+                message : "FAILED : userType was not provided",
+                data : {}
             })
         }
         
@@ -31,7 +53,9 @@ const verifySignUpBody = async (req,res,next) =>{
         
         if(user){
             return res.status(400).send({
-                message : "FAILED : User with same User ID exists"
+                success: false,
+                message : "FAILED : User with same User ID exists",
+                data : {}
             })
         }
 
@@ -41,7 +65,9 @@ const verifySignUpBody = async (req,res,next) =>{
     }catch(err){
         console.log("Error while validating the request object ",err)
         res.status(500).send({ // 500 -> internal server error
-            message : "Error while validating request bobject"
+            success: false,
+            message : "Error while validating request body",
+            data : {}
         })
     }
 }
@@ -49,14 +75,18 @@ const verifySignUpBody = async (req,res,next) =>{
 const verifySignInBody = (req,res,next) =>{
     if(!req.body.userId){
         return res.status(400).send({
-            message : "User Id Not Provided"
+            success: false,
+            message : "User Id Not Provided",
+            data : {}
         })
     }
 
     
     if(!req.body.password){
         return res.status(400).send({
-            message : "Password Not Provided"
+            success: false,
+            message : "Password Not Provided",
+            data : {}
         })
     }
 
@@ -64,26 +94,37 @@ const verifySignInBody = (req,res,next) =>{
 }
 
 const verifyToken = async (req,res,next) =>{
-    // check if token is present in header
-    const token = req.headers['x-access-token']
+    // Check if token is present in header.
+    // Swagger sends `Authorization: Bearer <token>`.
+    const authHeader = req.headers.authorization || req.headers.Authorization;
+    const token =
+        typeof authHeader === 'string' && authHeader.startsWith('Bearer ')
+            ? authHeader.slice('Bearer '.length)
+            : req.headers['x-access-token'];
 
     if(!token){
-        return res.status(403).send({ // 403 bad req - unautherized
-            message : "No Token Found"
+        return res.status(401).send({ // 401 unauthorized
+            success: false,
+            message : "Unauthorized: No token provided",
+            data : {}
         })
     }
     // is the token valid
     jwt.verify(token, auth_config.secretKey, async (err,decoded)=>{
         if(err) {
             return res.status(401).send({
-                message : "Unautherized"
+                success: false,
+                message : "Unauthorized: Invalid token",
+                data : {}
             })      
         }
         const user = await user_model.findOne({userId : decoded.id})
         // user id ko use karke token bnaya tha, isiliye decode karne pe wo mil jayegi 
         if(!user){
-            return res.status(400).send({
-                message : "Unautherized, User for the token doesn't exist"
+            return res.status(401).send({
+                success: false,
+                message : "Unauthorized: User for the token doesn't exist",
+                data : {}
             })
         }
         
@@ -102,8 +143,10 @@ const isAdmin = async (req, res, next) =>{
         next()
     }
     else{
-        return res.status(403).send({
-            message : "Only Admin User are allowed to access this endpoint"
+        return res.status(401).send({
+            success: false,
+            message : "Only Admin Users are allowed to access this endpoint",
+            data : {}
         })
     }
 }

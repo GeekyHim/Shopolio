@@ -21,11 +21,17 @@ exports.createNewCategory = async (req, res) => {
     //return the response
     try{
         const category = await category_model.create(cat_data)
-        return res.status(201).send(category)
+        return res.status(201).send({
+            success: true,
+            message: 'Category created',
+            data: category
+        })
     } catch (err){
         console.log("Error while creating category ",err)
         return res.status(500).send({
-            message : "Error while creating category"
+            success: false,
+            message : "Error while creating category",
+            data : {}
         })
     }
 }
